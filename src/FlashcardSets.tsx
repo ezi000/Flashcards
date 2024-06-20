@@ -16,7 +16,7 @@ export const FlashcardSets = () => {
   const updateFlashcardSetName = async (setName: string, id: number) => {
     try {
       const response = await fetch(
-        `https://localhost:7016/api/FlashcardSets/Update/${id}`,
+        `https://flashcardsrestapi.azurewebsites.net/api/FlashcardSets/Update/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -46,7 +46,7 @@ export const FlashcardSets = () => {
   const getFlashcardSets = async (userId: string) => {
     try {
       const response = await fetch(
-        `https://localhost:7016/api/FlashcardSets/GetByUserId/${userId}`,
+        `https://flashcardsrestapi.azurewebsites.net/api/FlashcardSets/GetByUserId/${userId}`,
         {
           method: "GET",
           credentials: "include",
@@ -66,7 +66,7 @@ export const FlashcardSets = () => {
   const deleteFlashcardSet = async (id: number) => {
     try {
       const response = await fetch(
-        `https://localhost:7016/api/FlashcardSets/Delete/${id}`,
+        `https://flashcardsrestapi.azurewebsites.net/api/FlashcardSets/Delete/${id}`,
         {
           method: "DELETE",
           credentials: "include",

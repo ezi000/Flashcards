@@ -60,10 +60,13 @@ export const NavBar = ({
             <StyledButtonSignUp
               onClick={() => {
                 localStorage.clear();
-                fetch("https://localhost:7016/api/Authentification/logout", {
-                  method: "POST",
-                  credentials: "include",
-                })
+                fetch(
+                  "https://flashcardsrestapi.azurewebsites.net/api/Authentification/logout",
+                  {
+                    method: "POST",
+                    credentials: "include",
+                  }
+                )
                   .then((response) => {
                     if (!response.ok) {
                       throw new Error("Logout failed");

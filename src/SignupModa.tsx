@@ -18,7 +18,7 @@ const SignupModal = ({
   ) => {
     try {
       const response = await fetch(
-        "https://localhost:7016/api/Authentification/register",
+        "https://flashcardsrestapi.azurewebsites.net/api/Authentification/register",
         {
           method: "POST",
           credentials: "include",

@@ -12,7 +12,7 @@ export const CreateFlashcardSet = () => {
   const handleSetCreation = async (setName: string, userId: string) => {
     try {
       const response = await fetch(
-        "https://localhost:7016/api/FlashcardSets/Add",
+        "https://flashcardsrestapi.azurewebsites.net/api/FlashcardSets/Add",
         {
           method: "POST",
           credentials: "include",
@@ -44,7 +44,7 @@ export const CreateFlashcardSet = () => {
   ) => {
     try {
       const response = await fetch(
-        "https://localhost:7016/api/FlashcardSets/AddMultipleFlashcards",
+        "https://flashcardsrestapi.azurewebsites.net/api/FlashcardSets/AddMultipleFlashcards",
         {
           method: "POST",
           credentials: "include",

@@ -15,7 +15,7 @@ const LoginModal = ({
   const handleLogin = async (loginLog: string, passwordLog: string) => {
     try {
       const response = await fetch(
-        "https://localhost:7016/api/Authentification/login",
+        "https://flashcardsrestapi.azurewebsites.net/api/Authentification/login",
         {
           method: "POST",
           credentials: "include",
