@@ -4,11 +4,44 @@ import { styled } from "styled-components";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 
 export const FlashcardSets = () => {
   const navigate = useNavigate();
   const userId = useContext(UserContext);
   const [flashcardSets, setFlashcardSets] = useState<FlashcardSet[]>([]);
+  const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
+  const [editName, setEditName] = useState<{ [key: number]: string }>({});
+
+  const updateFlashcardSetName = async (setName: string, id: number) => {
+    try {
+      const response = await fetch(
+        `https://localhost:7016/api/FlashcardSets/Update/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: id,
+            name: setName,
+          }),
+        }
+      );
+      if (response.ok) {
+        setFlashcardSets((prevSets) =>
+          prevSets.map((set) =>
+            set.id === id ? { ...set, name: setName } : set
+          )
+        );
+        setEditMode((prev) => ({ ...prev, [id]: false }));
+      }
+      return response.status;
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
 
   const getFlashcardSets = async (userId: string) => {
     try {
@@ -50,8 +83,17 @@ export const FlashcardSets = () => {
   };
 
   useEffect(() => {
-    getFlashcardSets(userId);
+    if (userId) {
+      getFlashcardSets(userId);
+    }
   }, [userId]);
+
+  const handleBlur = (id: number) => {
+    updateFlashcardSetName(
+      editName[id] ?? flashcardSets.find((set) => set.id === id)?.name ?? "",
+      id
+    );
+  };
 
   type FlashcardSet = {
     id: number;
@@ -73,7 +115,31 @@ export const FlashcardSets = () => {
               <CardBody key={flashcardSet.id}>
                 <CardHeader>
                   <StyledP>{flashcardSet.flashcards.length} Terms</StyledP>
-                  {}
+                  <IconButton
+                    disableRipple
+                    onClick={() =>
+                      setEditMode((prev) => ({
+                        ...prev,
+                        [flashcardSet.id]: true,
+                      }))
+                    }
+                    sx={{
+                      width: "fit-content",
+                      height: "fit-content",
+                      padding: "0",
+                      margin: "0",
+                    }}
+                  >
+                    <EditIcon
+                      sx={{
+                        color: "black",
+                        fontSize: "1.5rem",
+                        "&:hover": {
+                          color: "blue",
+                        },
+                      }}
+                    />
+                  </IconButton>
                   <IconButton
                     disableRipple
                     onClick={() => deleteFlashcardSet(flashcardSet.id)}
@@ -95,14 +161,28 @@ export const FlashcardSets = () => {
                     />
                   </IconButton>
                 </CardHeader>
-                <SetName
-                  key={flashcardSet.id}
-                  onClick={() =>
-                    navigate("/flashcard", { state: { flashcardSet } })
-                  }
-                >
-                  {flashcardSet.name}
-                </SetName>
+                {editMode[flashcardSet.id] ? (
+                  <InputCard
+                    value={editName[flashcardSet.id] ?? flashcardSet.name}
+                    onChange={(e) =>
+                      setEditName((prev) => ({
+                        ...prev,
+                        [flashcardSet.id]: e.target.value,
+                      }))
+                    }
+                    onBlur={() => handleBlur(flashcardSet.id)}
+                    autoFocus
+                  />
+                ) : (
+                  <SetName
+                    key={flashcardSet.id}
+                    onClick={() =>
+                      navigate("/flashcard", { state: { flashcardSet } })
+                    }
+                  >
+                    {flashcardSet.name}
+                  </SetName>
+                )}
               </CardBody>
             ))}
         </CreateFlashcardBody>
@@ -112,6 +192,21 @@ export const FlashcardSets = () => {
     </>
   );
 };
+
+const InputCard = styled.input`
+  background-color: white;
+  border-top: 0;
+  border-left: 0;
+  margin-left: 1rem;
+  font-size: 1rem;
+  border-right: 0;
+  border-bottom: 2px solid black;
+  color: black;
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid orange;
+  }
+`;
 
 const Alert = styled.div`
   font-family: "Lato", sans-serif;
@@ -156,7 +251,7 @@ const CardHeader = styled.div`
   padding: 1rem 0 0.5rem 0;
 `;
 
-const CreateFlashcardBody = styled.form`
+const CreateFlashcardBody = styled.div`
   font-family: "Lato", sans-serif;
   align-items: start;
   margin-top: 2rem;
