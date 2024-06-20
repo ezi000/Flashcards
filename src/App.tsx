@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModa";
 import UserContext from "./userContext";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 function App() {
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
 
   const [userId, setUser] = useState("");
-
+  const location = useLocation();
   useEffect(() => {
     setUser(localStorage.getItem("user") || "");
   }, []);
@@ -46,8 +46,14 @@ function App() {
         <SignupModal open={openSignup} handleClose={handleClose} />
         <UserContext.Provider value={userId}>
           <Outlet />
-          <Background src="/logo.png" alt="logo"></Background>
-          <StyledH1>Learn faster, remember better - Join us today!</StyledH1>
+          {location.pathname === "/" && (
+            <>
+              <Background src="/logo.png" alt="logo" />
+              <StyledH1>
+                Learn faster, remember better - Join us today!
+              </StyledH1>
+            </>
+          )}
         </UserContext.Provider>
       </Body>
     </>
