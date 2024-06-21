@@ -163,4 +163,7 @@ const ButtonGroup = styled.div`
   margin-left: 0.5rem;
   gap: 1rem;
   align-items: center;
+  @media (max-width: 500px) {
+    gap: 0;
+  }
 `;
