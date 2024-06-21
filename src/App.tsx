@@ -63,7 +63,7 @@ function App() {
 const StyledH1 = styled.h1`
   font-family: "Lato", sans-serif;
   color: #3a3838;
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
   font-weight: 900;
   user-select: none;
@@ -74,8 +74,8 @@ const StyledH1 = styled.h1`
 `;
 
 const Background = styled.img`
-  margin-top: 5rem;
-  max-width: 100%;
+  margin-top: 2rem;
+  max-width: 30%;
   @media (max-width: 768px) {
     max-width: 60%;
   }
