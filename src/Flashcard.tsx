@@ -147,7 +147,7 @@ const NavigationButtons = styled.div`
 `;
 
 const FlashcardContainer = styled.div`
-  margin-top: 6rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 4rem;
